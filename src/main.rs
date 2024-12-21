@@ -1,20 +1,30 @@
 use clap::Parser;
 use anyhow::Result;
 use chef::encode::url;
+use chef::commands::Commands;
+use std::io::{self, Read};
+
+
 
 #[derive(Parser)]
+#[command(version, about, long_about=None)]
+#[command(propagate_version = true)]
 struct Args {
-    #[clap(long="strict", short='s')] 
-    strict: bool,
-    #[clap(long="all", short='a')]
-    all: bool,
-    input: String,
+    #[command(subcommand)]
+    command: Commands
 }
 
 fn main() -> Result<()> {
     let args = Args::parse();
 
-    println!("{}", url::encode(args.input.as_bytes(), args.strict, args.all));
+    let mut input = Vec::new();
+    io::stdin().read_to_end(&mut input)?;
+
+    match &args.command {
+        Commands::UrlEncode { strict, all } => {
+            println!("{}", url::encode(&input, *strict, *all));
+        }
+    }
 
     Ok(())
 }

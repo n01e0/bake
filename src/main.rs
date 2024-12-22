@@ -24,6 +24,9 @@ fn main() -> Result<()> {
         Commands::UrlDecode => {
             println!("{}", decode::url::decode(&String::from_utf8(input)?)?);
         }
+        Commands::FromHex => {
+            println!("{}", decode::hex::decode(&String::from_utf8(input)?)?);
+        }
     }
 
     Ok(())

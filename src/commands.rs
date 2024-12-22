@@ -7,4 +7,5 @@ pub enum Commands {
         all: bool,
     },
     UrlDecode,
+    FromHex,
 }

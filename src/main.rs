@@ -27,6 +27,12 @@ fn main() -> Result<()> {
         Commands::FromHex => {
             println!("{}", decode::hex::decode(&String::from_utf8(input)?)?);
         }
+        Commands::Defang => {
+            println!(
+                "{}",
+                encode::defang::encode(&String::from_utf8(input)?.trim())
+            );
+        }
     }
 
     Ok(())

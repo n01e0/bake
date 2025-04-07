@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-anyhow = "1.0.95"
+anyhow = "1.0.97"
 clap = { version = "4.5.34", features = ["derive"] }
 nom = "8.0.0"
 percent-encoding-rfc3986 = "0.1.3"

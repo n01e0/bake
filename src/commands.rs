@@ -8,5 +8,12 @@ pub enum Commands {
     },
     UrlDecode,
     FromHex,
+    ToBase32 {
+        #[clap(long = "no-padding")]
+        no_padding: bool,
+        #[clap(long = "lower")]
+        lower: bool,
+    },
+    FromBase32,
     Defang,
 }

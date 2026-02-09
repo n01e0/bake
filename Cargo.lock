@@ -63,6 +63,7 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "clap",
+ "data-encoding",
  "nom",
  "percent-encoding-rfc3986",
 ]
@@ -112,6 +113,12 @@ name = "colorchoice"
 version = "1.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0b6a852b24ab71dffc585bcb46eaf7959d175cb865a7152e35b348d1b2960422"
+
+[[package]]
+name = "data-encoding"
+version = "2.10.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d7a1e2f27636f116493b8b860f5546edb47c8d8f8ea73e1d2a20be88e28d1fea"
 
 [[package]]
 name = "heck"

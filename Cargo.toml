@@ -4,7 +4,9 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+aes-gcm = "0.10.3"
 anyhow = "1.0.97"
+base64 = "0.22.1"
 clap = { version = "4.5.57", features = ["derive"] }
 nom = "8.0.0"
 percent-encoding-rfc3986 = "0.1.3"

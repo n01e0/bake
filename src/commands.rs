@@ -8,5 +8,15 @@ pub enum Commands {
     },
     UrlDecode,
     FromHex,
+    RegexReplace {
+        pattern: String,
+        replacement: String,
+        #[clap(long = "global", short = 'g')]
+        global: bool,
+        #[clap(long = "multiline")]
+        multiline: bool,
+        #[clap(long = "dotall")]
+        dotall: bool,
+    },
     Defang,
 }

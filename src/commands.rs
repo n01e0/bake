@@ -8,5 +8,9 @@ pub enum Commands {
     },
     UrlDecode,
     FromHex,
+    FromBase64 {
+        #[clap(long = "url-safe")]
+        url_safe: bool,
+    },
     Defang,
 }

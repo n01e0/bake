@@ -14,7 +14,7 @@ pub fn decode(input: &str) -> Result<String> {
         cleaned_input = cleaned_input.replace(prefix, "");
     }
 
-    if cleaned_input.len() % 2 != 0 {
+    if !cleaned_input.len().is_multiple_of(2) {
         return Err(anyhow!("Input length is not even: '{}'", cleaned_input));
     }
 

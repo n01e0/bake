@@ -8,5 +8,12 @@ pub enum Commands {
     },
     UrlDecode,
     FromHex,
+    ToBinary {
+        #[clap(long = "delimiter", short = 'd', default_value = "")]
+        delimiter: String,
+        #[clap(long = "prefix", short = 'p', default_value = "")]
+        prefix: String,
+    },
+    FromBinary,
     Defang,
 }

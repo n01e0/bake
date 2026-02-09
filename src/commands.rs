@@ -8,5 +8,10 @@ pub enum Commands {
     },
     UrlDecode,
     FromHex,
+    ToGzipBase64 {
+        #[clap(long = "no-padding")]
+        no_padding: bool,
+    },
+    FromGzipBase64,
     Defang,
 }

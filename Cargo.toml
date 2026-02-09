@@ -5,6 +5,8 @@ edition = "2021"
 
 [dependencies]
 anyhow = "1.0.97"
+base64 = "0.22.1"
 clap = { version = "4.5.57", features = ["derive"] }
+flate2 = "1.1.5"
 nom = "8.0.0"
 percent-encoding-rfc3986 = "0.1.3"

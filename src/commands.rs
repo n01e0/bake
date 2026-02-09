@@ -8,5 +8,11 @@ pub enum Commands {
     },
     UrlDecode,
     FromHex,
+    ToBase64 {
+        #[clap(long = "url-safe")]
+        url_safe: bool,
+        #[clap(long = "no-padding")]
+        no_padding: bool,
+    },
     Defang,
 }

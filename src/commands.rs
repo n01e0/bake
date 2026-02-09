@@ -8,5 +8,7 @@ pub enum Commands {
     },
     UrlDecode,
     FromHex,
+    ToHtmlEntity,
+    FromHtmlEntity,
     Defang,
 }

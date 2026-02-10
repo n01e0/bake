@@ -70,6 +70,16 @@ pub enum DohMethod {
     Post,
 }
 
+#[derive(Clone, Copy, Debug, Eq, PartialEq, ValueEnum)]
+pub enum CaseStyle {
+    Lower,
+    Upper,
+    Snake,
+    Kebab,
+    Camel,
+    Pascal,
+}
+
 #[derive(Subcommand)]
 pub enum Commands {
     Completion {
@@ -124,6 +134,7 @@ pub enum EncodeCommands {
     },
     Base58,
     Base85,
+    Base91,
     Binary {
         #[clap(long = "delimiter", short = 'd', default_value = "")]
         delimiter: String,
@@ -135,6 +146,10 @@ pub enum EncodeCommands {
         no_padding: bool,
         #[clap(long = "lower")]
         lower: bool,
+    },
+    QuotedPrintable {
+        #[clap(long = "binary")]
+        binary: bool,
     },
     HtmlEntity,
     Punycode,
@@ -177,8 +192,13 @@ pub enum DecodeCommands {
     },
     Base58,
     Base85,
+    Base91,
     Binary,
     Base32,
+    QuotedPrintable {
+        #[clap(long = "strict")]
+        strict: bool,
+    },
     HtmlEntity,
     Punycode,
     UnicodeEscape,
@@ -231,6 +251,116 @@ pub enum CryptoCommands {
         #[clap(long = "aad", default_value = "")]
         aad: String,
     },
+    EncryptAesCbc {
+        #[clap(long = "key")]
+        key_hex: String,
+        #[clap(long = "iv")]
+        iv_hex: String,
+        #[clap(long = "no-padding")]
+        no_padding: bool,
+    },
+    DecryptAesCbc {
+        #[clap(long = "key")]
+        key_hex: String,
+        #[clap(long = "iv")]
+        iv_hex: String,
+    },
+    EncryptAesEcb {
+        #[clap(long = "key")]
+        key_hex: String,
+        #[clap(long = "no-padding")]
+        no_padding: bool,
+    },
+    DecryptAesEcb {
+        #[clap(long = "key")]
+        key_hex: String,
+    },
+    EncryptAesCtr {
+        #[clap(long = "key")]
+        key_hex: String,
+        #[clap(long = "iv")]
+        iv_hex: String,
+        #[clap(long = "no-padding")]
+        no_padding: bool,
+    },
+    DecryptAesCtr {
+        #[clap(long = "key")]
+        key_hex: String,
+        #[clap(long = "iv")]
+        iv_hex: String,
+    },
+    EncryptChacha20 {
+        #[clap(long = "key")]
+        key_hex: String,
+        #[clap(long = "nonce")]
+        nonce_hex: String,
+        #[clap(long = "no-padding")]
+        no_padding: bool,
+    },
+    DecryptChacha20 {
+        #[clap(long = "key")]
+        key_hex: String,
+        #[clap(long = "nonce")]
+        nonce_hex: String,
+    },
+    EncryptRc4 {
+        #[clap(long = "key")]
+        key: String,
+        #[clap(long = "hex-key")]
+        hex_key: bool,
+        #[clap(long = "no-padding")]
+        no_padding: bool,
+    },
+    DecryptRc4 {
+        #[clap(long = "key")]
+        key: String,
+        #[clap(long = "hex-key")]
+        hex_key: bool,
+    },
+    KdfPbkdf2 {
+        #[clap(long = "password")]
+        password: String,
+        #[clap(long = "salt")]
+        salt: String,
+        #[clap(long = "hex-salt")]
+        hex_salt: bool,
+        #[clap(long = "iterations", default_value_t = 100_000)]
+        iterations: u32,
+        #[clap(long = "length", default_value_t = 32)]
+        length: usize,
+    },
+    KdfScrypt {
+        #[clap(long = "password")]
+        password: String,
+        #[clap(long = "salt")]
+        salt: String,
+        #[clap(long = "hex-salt")]
+        hex_salt: bool,
+        #[clap(long = "log-n", default_value_t = 15)]
+        log_n: u8,
+        #[clap(long = "r", default_value_t = 8)]
+        r: u32,
+        #[clap(long = "p", default_value_t = 1)]
+        p: u32,
+        #[clap(long = "length", default_value_t = 32)]
+        length: usize,
+    },
+    KdfArgon2id {
+        #[clap(long = "password")]
+        password: String,
+        #[clap(long = "salt")]
+        salt: String,
+        #[clap(long = "hex-salt")]
+        hex_salt: bool,
+        #[clap(long = "memory-kib", default_value_t = 19_456)]
+        memory_kib: u32,
+        #[clap(long = "iterations", default_value_t = 2)]
+        iterations: u32,
+        #[clap(long = "parallelism", default_value_t = 1)]
+        parallelism: u32,
+        #[clap(long = "length", default_value_t = 32)]
+        length: usize,
+    },
     XorSingle {
         #[clap(long = "key")]
         key: u8,
@@ -252,6 +382,12 @@ pub enum CryptoCommands {
         min_score: f64,
     },
     JwtDecode,
+    JwtSignHs256 {
+        #[clap(long = "key")]
+        key: String,
+        #[clap(long = "claims")]
+        claims: String,
+    },
     JwtVerifyHs256 {
         #[clap(long = "key")]
         key: String,
@@ -278,6 +414,17 @@ pub enum TextCommands {
         #[clap(long = "form", short = 'f', value_enum, default_value_t = UnicodeForm::Nfc)]
         form: UnicodeForm,
     },
+    Rot13,
+    Caesar {
+        #[clap(long = "shift")]
+        shift: i8,
+        #[clap(long = "decode")]
+        decode: bool,
+    },
+    CaseConvert {
+        #[clap(long = "style", value_enum)]
+        style: CaseStyle,
+    },
     JsonPretty,
     JsonMinify,
     JsonPath {
@@ -285,8 +432,32 @@ pub enum TextCommands {
     },
     XmlPretty,
     XmlMinify,
+    #[command(name = "xpath")]
     XPath {
         query: String,
+    },
+    JsonToYaml,
+    YamlToJson {
+        #[clap(long = "pretty")]
+        pretty: bool,
+    },
+    JsonToToml,
+    TomlToJson {
+        #[clap(long = "pretty")]
+        pretty: bool,
+    },
+    CsvToJson {
+        #[clap(long = "pretty")]
+        pretty: bool,
+    },
+    JsonToCsv,
+    UrlParse {
+        #[clap(long = "url")]
+        url: String,
+    },
+    UrlNormalize {
+        #[clap(long = "url")]
+        url: String,
     },
     Defang,
 }
@@ -296,20 +467,32 @@ pub enum TimeCommands {
     FromUnix {
         #[clap(long = "millis")]
         millis: bool,
+        #[clap(long = "value")]
+        value: String,
     },
     ToUnix {
         #[clap(long = "millis")]
         millis: bool,
+        #[clap(long = "value")]
+        value: String,
     },
 }
 
 #[derive(Subcommand)]
 pub enum NetworkCommands {
-    CidrInfo,
-    IpToInt,
+    CidrInfo {
+        #[clap(long = "cidr")]
+        cidr: Option<String>,
+    },
+    IpToInt {
+        #[clap(long = "ip")]
+        ip: Option<String>,
+    },
     IntToIp {
         #[clap(long = "v6")]
         v6: bool,
+        #[clap(long = "value")]
+        value: Option<String>,
     },
     DnsToDohPacket {
         #[clap(long = "name")]

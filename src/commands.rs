@@ -8,5 +8,13 @@ pub enum Commands {
     },
     UrlDecode,
     FromHex,
+    FromUnix {
+        #[clap(long = "millis")]
+        millis: bool,
+    },
+    ToUnix {
+        #[clap(long = "millis")]
+        millis: bool,
+    },
     Defang,
 }

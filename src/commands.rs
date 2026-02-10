@@ -8,5 +8,11 @@ pub enum Commands {
     },
     UrlDecode,
     FromHex,
+    CidrInfo,
+    IpToInt,
+    IntToIp {
+        #[clap(long = "v6")]
+        v6: bool,
+    },
     Defang,
 }

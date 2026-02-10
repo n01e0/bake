@@ -67,6 +67,12 @@ fn main() -> Result<()> {
                     encode::base64::encode(trimmed_input, *url_safe, *no_padding)
                 );
             }
+            EncodeCommands::Base58 => {
+                println!("{}", encode::base58::encode(trimmed_input));
+            }
+            EncodeCommands::Base85 => {
+                println!("{}", encode::base85::encode(trimmed_input));
+            }
             EncodeCommands::Binary { delimiter, prefix } => {
                 println!(
                     "{}",
@@ -82,10 +88,40 @@ fn main() -> Result<()> {
             EncodeCommands::HtmlEntity => {
                 println!("{}", encode::html_entity::encode(trimmed_input_str));
             }
+            EncodeCommands::Punycode => {
+                println!("{}", encode::punycode::encode(trimmed_input_str)?);
+            }
+            EncodeCommands::UnicodeEscape => {
+                println!("{}", encode::unicode_escape::encode(trimmed_input_str));
+            }
             EncodeCommands::GzipBase64 { no_padding } => {
                 println!(
                     "{}",
                     transform::gzip::compress_to_base64(trimmed_input, *no_padding)?
+                );
+            }
+            EncodeCommands::ZlibBase64 { no_padding } => {
+                println!(
+                    "{}",
+                    transform::compress::zlib_compress_to_base64(trimmed_input, *no_padding)?
+                );
+            }
+            EncodeCommands::DeflateBase64 { no_padding } => {
+                println!(
+                    "{}",
+                    transform::compress::deflate_compress_to_base64(trimmed_input, *no_padding)?
+                );
+            }
+            EncodeCommands::Bzip2Base64 { no_padding } => {
+                println!(
+                    "{}",
+                    transform::compress::bzip2_compress_to_base64(trimmed_input, *no_padding)?
+                );
+            }
+            EncodeCommands::XzBase64 { no_padding } => {
+                println!(
+                    "{}",
+                    transform::compress::xz_compress_to_base64(trimmed_input, *no_padding)?
                 );
             }
             EncodeCommands::Charset { to, output } => {
@@ -106,6 +142,12 @@ fn main() -> Result<()> {
             DecodeCommands::Base64 { url_safe } => {
                 println!("{}", decode::base64::decode(raw_input_str, *url_safe)?);
             }
+            DecodeCommands::Base58 => {
+                println!("{}", decode::base58::decode(raw_input_str)?);
+            }
+            DecodeCommands::Base85 => {
+                println!("{}", decode::base85::decode(raw_input_str)?);
+            }
             DecodeCommands::Binary => {
                 println!("{}", decode::binary::decode(raw_input_str)?);
             }
@@ -115,10 +157,40 @@ fn main() -> Result<()> {
             DecodeCommands::HtmlEntity => {
                 println!("{}", decode::html_entity::decode(raw_input_str));
             }
+            DecodeCommands::Punycode => {
+                println!("{}", decode::punycode::decode(trimmed_input_str)?);
+            }
+            DecodeCommands::UnicodeEscape => {
+                println!("{}", decode::unicode_escape::decode(raw_input_str)?);
+            }
             DecodeCommands::GzipBase64 => {
                 println!(
                     "{}",
                     transform::gzip::decompress_from_base64(raw_input_str)?
+                );
+            }
+            DecodeCommands::ZlibBase64 => {
+                println!(
+                    "{}",
+                    transform::compress::zlib_decompress_from_base64(raw_input_str)?
+                );
+            }
+            DecodeCommands::DeflateBase64 => {
+                println!(
+                    "{}",
+                    transform::compress::deflate_decompress_from_base64(raw_input_str)?
+                );
+            }
+            DecodeCommands::Bzip2Base64 => {
+                println!(
+                    "{}",
+                    transform::compress::bzip2_decompress_from_base64(raw_input_str)?
+                );
+            }
+            DecodeCommands::XzBase64 => {
+                println!(
+                    "{}",
+                    transform::compress::xz_decompress_from_base64(raw_input_str)?
                 );
             }
             DecodeCommands::Charset {
@@ -132,6 +204,22 @@ fn main() -> Result<()> {
         Commands::Crypto { command } => match command {
             CryptoCommands::Hash { algorithm } => {
                 println!("{}", transform::hash::hash(trimmed_input, *algorithm));
+            }
+            CryptoCommands::Hmac {
+                algorithm,
+                key,
+                hex_key,
+            } => {
+                println!(
+                    "{}",
+                    transform::checksum::hmac_digest(trimmed_input, key, *hex_key, *algorithm)?
+                );
+            }
+            CryptoCommands::Crc { algorithm } => {
+                println!(
+                    "{}",
+                    transform::checksum::crc_digest(trimmed_input, *algorithm)
+                );
             }
             CryptoCommands::EncryptAesGcm {
                 key_hex,
@@ -186,6 +274,18 @@ fn main() -> Result<()> {
                     );
                 }
             }
+            CryptoCommands::JwtDecode => {
+                println!("{}", transform::jwt::decode_unverified(trimmed_input_str)?);
+            }
+            CryptoCommands::JwtVerifyHs256 { key } => {
+                println!("{}", transform::jwt::verify_hs256(trimmed_input_str, key)?);
+            }
+            CryptoCommands::JwtVerifyRs256 { public_key } => {
+                println!(
+                    "{}",
+                    transform::jwt::verify_rs256(trimmed_input_str, public_key)?
+                );
+            }
         },
         Commands::Text { command } => match command {
             TextCommands::RegexReplace {
@@ -212,6 +312,24 @@ fn main() -> Result<()> {
                     "{}",
                     transform::unicode::normalize(trimmed_input_str, *form)
                 );
+            }
+            TextCommands::JsonPretty => {
+                println!("{}", transform::json_tools::pretty(raw_input_str)?);
+            }
+            TextCommands::JsonMinify => {
+                println!("{}", transform::json_tools::minify(raw_input_str)?);
+            }
+            TextCommands::JsonPath { query } => {
+                println!("{}", transform::json_tools::query(raw_input_str, query)?);
+            }
+            TextCommands::XmlPretty => {
+                println!("{}", transform::xml_tools::pretty(raw_input_str)?);
+            }
+            TextCommands::XmlMinify => {
+                println!("{}", transform::xml_tools::minify(raw_input_str)?);
+            }
+            TextCommands::XPath { query } => {
+                println!("{}", transform::xml_tools::xpath(raw_input_str, query)?);
             }
             TextCommands::Defang => {
                 println!("{}", encode::defang::encode(trimmed_input_str.trim()));
@@ -254,6 +372,33 @@ fn main() -> Result<()> {
                 } else {
                     println!("{payload}");
                 }
+            }
+            NetworkCommands::DnsPacketParse { packet, format } => {
+                let packet_input = match packet {
+                    Some(v) => v.as_str(),
+                    None => trimmed_input_str,
+                };
+                println!(
+                    "{}",
+                    transform::dns::parse_dns_packet(packet_input, *format)?
+                );
+            }
+            NetworkCommands::DohRequest {
+                name,
+                qtype,
+                id,
+                endpoint,
+                method,
+            } => {
+                let domain = match name {
+                    Some(v) => v.as_str(),
+                    None => trimmed_input_str,
+                };
+                let payload = transform::dns::build_doh_payload(domain, *qtype, *id)?;
+                println!(
+                    "{}",
+                    transform::dns::build_doh_request(endpoint, &payload, *method)?
+                );
             }
         },
     }

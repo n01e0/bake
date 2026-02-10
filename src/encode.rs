@@ -1,7 +1,11 @@
 pub mod base32;
+pub mod base58;
 pub mod base64;
+pub mod base85;
 pub mod binary;
 pub mod defang;
 pub mod hex;
 pub mod html_entity;
+pub mod punycode;
+pub mod unicode_escape;
 pub mod url;

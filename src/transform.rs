@@ -1,10 +1,15 @@
 pub mod aes_gcm;
 pub mod charset;
+pub mod checksum;
+pub mod compress;
 pub mod date;
 pub mod dns;
 pub mod gzip;
 pub mod hash;
+pub mod json_tools;
+pub mod jwt;
 pub mod network;
 pub mod regex_replace;
 pub mod unicode;
+pub mod xml_tools;
 pub mod xor;

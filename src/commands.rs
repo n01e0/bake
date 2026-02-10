@@ -46,13 +46,39 @@ pub enum DnsRecordType {
 
 #[derive(Subcommand)]
 pub enum Commands {
-    UrlEncode {
+    Encode {
+        #[command(subcommand)]
+        command: EncodeCommands,
+    },
+    Decode {
+        #[command(subcommand)]
+        command: DecodeCommands,
+    },
+    Crypto {
+        #[command(subcommand)]
+        command: CryptoCommands,
+    },
+    Text {
+        #[command(subcommand)]
+        command: TextCommands,
+    },
+    Time {
+        #[command(subcommand)]
+        command: TimeCommands,
+    },
+    Network {
+        #[command(subcommand)]
+        command: NetworkCommands,
+    },
+}
+
+#[derive(Subcommand)]
+pub enum EncodeCommands {
+    Url {
         #[clap(long = "all", short = 'a')]
         all: bool,
     },
-    UrlDecode,
-    FromHex,
-    ToHex {
+    Hex {
         #[clap(long = "delimiter", short = 'd', default_value = "")]
         delimiter: String,
         #[clap(long = "prefix", short = 'p', default_value = "")]
@@ -60,51 +86,63 @@ pub enum Commands {
         #[clap(long = "upper", short = 'u')]
         upper: bool,
     },
-    ToBase64 {
+    Base64 {
         #[clap(long = "url-safe")]
         url_safe: bool,
         #[clap(long = "no-padding")]
         no_padding: bool,
     },
-    FromBase64 {
-        #[clap(long = "url-safe")]
-        url_safe: bool,
-    },
-    ToBinary {
+    Binary {
         #[clap(long = "delimiter", short = 'd', default_value = "")]
         delimiter: String,
         #[clap(long = "prefix", short = 'p', default_value = "")]
         prefix: String,
     },
-    FromBinary,
-    ToBase32 {
+    Base32 {
         #[clap(long = "no-padding")]
         no_padding: bool,
         #[clap(long = "lower")]
         lower: bool,
     },
-    FromBase32,
-    ToHtmlEntity,
-    FromHtmlEntity,
-    RegexReplace {
-        pattern: String,
-        replacement: String,
-        #[clap(long = "global", short = 'g')]
-        global: bool,
-        #[clap(long = "multiline")]
-        multiline: bool,
-        #[clap(long = "dotall")]
-        dotall: bool,
+    HtmlEntity,
+    GzipBase64 {
+        #[clap(long = "no-padding")]
+        no_padding: bool,
     },
+    Charset {
+        #[clap(long = "to", value_enum)]
+        to: Charset,
+        #[clap(long = "output", value_enum, default_value_t = BinaryFormat::Hex)]
+        output: BinaryFormat,
+    },
+}
+
+#[derive(Subcommand)]
+pub enum DecodeCommands {
+    Url,
+    Hex,
+    Base64 {
+        #[clap(long = "url-safe")]
+        url_safe: bool,
+    },
+    Binary,
+    Base32,
+    HtmlEntity,
+    GzipBase64,
+    Charset {
+        #[clap(long = "from", value_enum)]
+        from: Charset,
+        #[clap(long = "input", value_enum, default_value_t = BinaryFormat::Hex)]
+        input: BinaryFormat,
+    },
+}
+
+#[derive(Subcommand)]
+pub enum CryptoCommands {
     Hash {
         #[clap(long = "algorithm", short = 'a', value_enum, default_value_t = HashAlgorithm::Sha256)]
         algorithm: HashAlgorithm,
     },
-    ToGzipBase64 {
-        #[clap(long = "no-padding")]
-        no_padding: bool,
-    },
-    FromGzipBase64,
     EncryptAesGcm {
         #[clap(long = "key")]
         key_hex: String,
@@ -143,22 +181,29 @@ pub enum Commands {
         #[clap(long = "min-score", default_value_t = 0.0)]
         min_score: f64,
     },
+}
+
+#[derive(Subcommand)]
+pub enum TextCommands {
+    RegexReplace {
+        pattern: String,
+        replacement: String,
+        #[clap(long = "global", short = 'g')]
+        global: bool,
+        #[clap(long = "multiline")]
+        multiline: bool,
+        #[clap(long = "dotall")]
+        dotall: bool,
+    },
     NormalizeUnicode {
         #[clap(long = "form", short = 'f', value_enum, default_value_t = UnicodeForm::Nfc)]
         form: UnicodeForm,
     },
-    EncodeCharset {
-        #[clap(long = "to", value_enum)]
-        to: Charset,
-        #[clap(long = "output", value_enum, default_value_t = BinaryFormat::Hex)]
-        output: BinaryFormat,
-    },
-    DecodeCharset {
-        #[clap(long = "from", value_enum)]
-        from: Charset,
-        #[clap(long = "input", value_enum, default_value_t = BinaryFormat::Hex)]
-        input: BinaryFormat,
-    },
+    Defang,
+}
+
+#[derive(Subcommand)]
+pub enum TimeCommands {
     FromUnix {
         #[clap(long = "millis")]
         millis: bool,
@@ -167,6 +212,10 @@ pub enum Commands {
         #[clap(long = "millis")]
         millis: bool,
     },
+}
+
+#[derive(Subcommand)]
+pub enum NetworkCommands {
     CidrInfo,
     IpToInt,
     IntToIp {
@@ -183,5 +232,4 @@ pub enum Commands {
         #[clap(long = "endpoint")]
         endpoint: Option<String>,
     },
-    Defang,
 }

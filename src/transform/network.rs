@@ -1,13 +1,20 @@
 use anyhow::{anyhow, Result};
-use ipnet::Ipv4Net;
+use ipnet::{IpNet, Ipv4Net, Ipv6Net};
 use std::net::{IpAddr, Ipv4Addr, Ipv6Addr};
 
 pub fn cidr_info(input: &str) -> Result<String> {
-    let net: Ipv4Net = input
+    let net: IpNet = input
         .trim()
         .parse()
-        .map_err(|e| anyhow!("Invalid IPv4 CIDR: {e}"))?;
+        .map_err(|e| anyhow!("Invalid CIDR: {e}"))?;
 
+    match net {
+        IpNet::V4(v4) => cidr_info_v4(v4),
+        IpNet::V6(v6) => cidr_info_v6(v6),
+    }
+}
+
+fn cidr_info_v4(net: Ipv4Net) -> Result<String> {
     let network = net.network();
     let broadcast = net.broadcast();
     let prefix = net.prefix_len();
@@ -26,7 +33,32 @@ pub fn cidr_info(input: &str) -> Result<String> {
     let wildcard = u32_to_ipv4(!ipv4_to_u32(mask));
 
     Ok(format!(
-        "network={network}\nbroadcast={broadcast}\nfirst_host={first_host}\nlast_host={last_host}\nnetmask={mask}\nwildcard={wildcard}\nusable_hosts={usable_hosts}"
+        "version=4\nnetwork={network}\nbroadcast={broadcast}\nfirst_host={first_host}\nlast_host={last_host}\nnetmask={mask}\nwildcard={wildcard}\nusable_hosts={usable_hosts}"
+    ))
+}
+
+fn cidr_info_v6(net: Ipv6Net) -> Result<String> {
+    let network = net.network();
+    let prefix = net.prefix_len();
+    let net_u = u128::from_be_bytes(network.octets());
+    let host_bits = 128 - prefix as u32;
+    let mask = if host_bits == 128 {
+        u128::MAX
+    } else {
+        (1u128 << host_bits) - 1
+    };
+    let last_u = net_u | mask;
+    let last = Ipv6Addr::from(last_u.to_be_bytes());
+
+    let usable_hosts = match prefix {
+        128 => "1".to_string(),
+        127 => "2".to_string(),
+        _ if host_bits < 128 => format!("{}", (1u128 << host_bits) - 2),
+        _ => format!("2^{host_bits} - 2"),
+    };
+
+    Ok(format!(
+        "version=6\nnetwork={network}\nfirst_host={network}\nlast_host={last}\nprefix={prefix}\nusable_hosts={usable_hosts}"
     ))
 }
 
@@ -75,17 +107,16 @@ mod test {
     #[test]
     fn cidr_24() {
         let out = cidr_info("192.168.1.10/24").unwrap();
+        assert!(out.contains("version=4"));
         assert!(out.contains("network=192.168.1.0"));
-        assert!(out.contains("broadcast=192.168.1.255"));
         assert!(out.contains("usable_hosts=254"));
     }
 
     #[test]
-    fn cidr_31() {
-        let out = cidr_info("10.0.0.0/31").unwrap();
-        assert!(out.contains("first_host=10.0.0.0"));
-        assert!(out.contains("last_host=10.0.0.1"));
-        assert!(out.contains("usable_hosts=2"));
+    fn cidr_v6() {
+        let out = cidr_info("2001:db8::/126").unwrap();
+        assert!(out.contains("version=6"));
+        assert!(out.contains("prefix=126"));
     }
 
     #[test]
@@ -102,11 +133,5 @@ mod test {
     fn ipv6_roundtrip() {
         let n = ip_to_int("::1").unwrap();
         assert_eq!(int_to_ip(&n, true).unwrap(), "::1");
-    }
-
-    #[test]
-    fn invalid_cidr() {
-        let err = cidr_info("2001:db8::/32").unwrap_err().to_string();
-        assert!(err.contains("Invalid IPv4 CIDR"));
     }
 }

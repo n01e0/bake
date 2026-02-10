@@ -1,6 +1,6 @@
 use anyhow::{anyhow, Result};
 use base64::{engine::general_purpose, Engine};
-use jsonwebtoken::{decode, Algorithm, DecodingKey, Validation};
+use jsonwebtoken::{decode, encode, Algorithm, DecodingKey, EncodingKey, Header, Validation};
 use serde_json::{json, Value};
 
 pub fn decode_unverified(token: &str) -> Result<String> {
@@ -18,6 +18,14 @@ pub fn decode_unverified(token: &str) -> Result<String> {
     });
 
     serde_json::to_string_pretty(&obj).map_err(|e| anyhow!("JSON format error: {e}"))
+}
+
+pub fn sign_hs256(claims_json: &str, key: &str) -> Result<String> {
+    let claims: Value =
+        serde_json::from_str(claims_json).map_err(|e| anyhow!("Invalid claims JSON: {e}"))?;
+    let header = Header::new(Algorithm::HS256);
+    encode(&header, &claims, &EncodingKey::from_secret(key.as_bytes()))
+        .map_err(|e| anyhow!("JWT sign failed (HS256): {e}"))
 }
 
 pub fn verify_hs256(token: &str, key: &str) -> Result<String> {
@@ -80,7 +88,7 @@ fn decode_base64url(input: &str) -> Result<Vec<u8>> {
 
 #[cfg(test)]
 mod test {
-    use super::{decode_unverified, verify_hs256};
+    use super::{decode_unverified, sign_hs256, verify_hs256};
 
     #[test]
     fn decode_unverified_works() {
@@ -96,5 +104,12 @@ mod test {
         let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
         let out = verify_hs256(token, "your-256-bit-secret").unwrap();
         assert!(out.contains("John Doe"));
+    }
+
+    #[test]
+    fn sign_hs256_works() {
+        let token = sign_hs256("{\"sub\":\"42\"}", "secret").unwrap();
+        let out = verify_hs256(&token, "secret").unwrap();
+        assert!(out.contains("\"sub\": \"42\""));
     }
 }

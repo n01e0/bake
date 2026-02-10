@@ -1,4 +1,5 @@
 use clap::{Subcommand, ValueEnum};
+use clap_complete::Shell;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, ValueEnum)]
 pub enum HashAlgorithm {
@@ -46,6 +47,10 @@ pub enum DnsRecordType {
 
 #[derive(Subcommand)]
 pub enum Commands {
+    Completion {
+        #[clap(value_enum)]
+        shell: Shell,
+    },
     Encode {
         #[command(subcommand)]
         command: EncodeCommands,

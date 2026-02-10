@@ -6,7 +6,8 @@ use chef::{
     },
     decode, encode, transform,
 };
-use clap::Parser;
+use clap::{CommandFactory, Parser};
+use clap_complete::generate;
 use std::io::{self, Read};
 
 #[derive(Parser)]
@@ -28,6 +29,13 @@ fn trim_trailing_newlines(input: &[u8]) -> &[u8] {
 fn main() -> Result<()> {
     let args = Args::parse();
 
+    if let Commands::Completion { shell } = &args.command {
+        let mut cmd = Args::command();
+        let bin_name = cmd.get_name().to_string();
+        generate(*shell, &mut cmd, bin_name, &mut io::stdout());
+        return Ok(());
+    }
+
     let mut input = Vec::new();
     io::stdin().read_to_end(&mut input)?;
     let trimmed_input = trim_trailing_newlines(&input);
@@ -35,6 +43,7 @@ fn main() -> Result<()> {
     let trimmed_input_str = std::str::from_utf8(trimmed_input)?;
 
     match &args.command {
+        Commands::Completion { .. } => unreachable!("completion is handled before stdin read"),
         Commands::Encode { command } => match command {
             EncodeCommands::Url { all } => {
                 println!("{}", encode::url::encode(trimmed_input_str, *all));

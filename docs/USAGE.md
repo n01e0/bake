@@ -497,32 +497,32 @@ Options:
 Usage: chef crypto <COMMAND>
 
 Commands:
-  hash                        
-  hmac                        
-  crc                         
-  encrypt-aes-gcm             
-  decrypt-aes-gcm             
-  encrypt-aes-cbc             
-  decrypt-aes-cbc             
-  encrypt-aes-ecb             
-  decrypt-aes-ecb             
-  encrypt-aes-ctr             
-  decrypt-aes-ctr             
-  encrypt-chacha20            
-  decrypt-chacha20            
-  encrypt-rc4                 
-  decrypt-rc4                 
-  kdf-pbkdf2                  
-  kdf-scrypt                  
-  kdf-argon2id                
-  xor-single                  
-  xor-repeat                  
-  xor-bruteforce-single-byte  
-  jwt-decode                  
-  jwt-sign-hs256              
-  jwt-verify-hs256            
-  jwt-verify-rs256            
-  help                        Print this message or the help of the given subcommand(s)
+  hash              
+  hmac              
+  crc               
+  encrypt-aes-gcm   
+  decrypt-aes-gcm   
+  encrypt-aes-cbc   
+  decrypt-aes-cbc   
+  encrypt-aes-ecb   
+  decrypt-aes-ecb   
+  encrypt-aes-ctr   
+  decrypt-aes-ctr   
+  encrypt-chacha20  
+  decrypt-chacha20  
+  encrypt-rc4       
+  decrypt-rc4       
+  kdf-pbkdf2        
+  kdf-scrypt        
+  kdf-argon2id      
+  xor-single        
+  xor-repeat        
+  xor-bruteforce    
+  jwt-decode        
+  jwt-sign-hs256    
+  jwt-verify-hs256  
+  jwt-verify-rs256  
+  help              Print this message or the help of the given subcommand(s)
 
 Options:
   -h, --help     Print help
@@ -788,14 +788,18 @@ Options:
   -V, --version     Print version
 ```
 
-### `crypto xor-bruteforce-single-byte`
+### `crypto xor-bruteforce`
 
 ```text
-Usage: chef crypto xor-bruteforce-single-byte [OPTIONS]
+Usage: chef crypto xor-bruteforce [OPTIONS]
 
 Options:
+      --key-bytes <KEY_BYTES>  [default: 1]
       --top <TOP>              [default: 5]
       --min-score <MIN_SCORE>  [default: 0]
+      --prefix <PREFIX>        
+      --suffix <SUFFIX>        
+      --word <WORD>            
   -h, --help                   Print help
   -V, --version                Print version
 ```

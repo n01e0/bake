@@ -37,6 +37,7 @@ echo -n 'hello' | chef crypto encrypt-aes-gcm \
 # Text
 printf '{"a":1}' | chef text json-pretty
 chef text url-parse --url 'https://example.com:443/path?a=1#frag'
+printf 'uryyb jbeyq' | chef text rot13-bruteforce --top 5
 
 # Time / Network (no stdin required)
 chef time from-unix --value 1704067200

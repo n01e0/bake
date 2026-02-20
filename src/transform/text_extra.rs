@@ -1,5 +1,12 @@
 use crate::commands::CaseStyle;
 
+#[derive(Debug, Clone)]
+pub struct CaesarCandidate {
+    pub shift: u8,
+    pub score: f64,
+    pub plaintext: String,
+}
+
 pub fn rot13(input: &str) -> String {
     caesar_with_shift(input, 13)
 }
@@ -7,6 +14,33 @@ pub fn rot13(input: &str) -> String {
 pub fn caesar(input: &str, shift: i8, decode: bool) -> String {
     let effective = if decode { -shift } else { shift };
     caesar_with_shift(input, effective)
+}
+
+pub fn rot13_bruteforce(input: &str, top: usize, min_score: f64) -> Vec<CaesarCandidate> {
+    if input.is_empty() || top == 0 {
+        return Vec::new();
+    }
+
+    let mut candidates: Vec<CaesarCandidate> = (0u8..=25)
+        .map(|shift| {
+            let plaintext = caesar(input, shift as i8, true);
+            let score = english_score(plaintext.as_bytes());
+            CaesarCandidate {
+                shift,
+                score,
+                plaintext,
+            }
+        })
+        .filter(|c| c.score >= min_score)
+        .collect();
+
+    candidates.sort_by(|a, b| {
+        b.score
+            .total_cmp(&a.score)
+            .then_with(|| a.shift.cmp(&b.shift))
+    });
+    candidates.truncate(top);
+    candidates
 }
 
 pub fn case_convert(input: &str, style: CaseStyle) -> String {
@@ -53,6 +87,123 @@ fn shift_char(c: char, shift: i8) -> char {
     (start + shifted as u8) as char
 }
 
+fn english_score(bytes: &[u8]) -> f64 {
+    if bytes.is_empty() {
+        return 0.0;
+    }
+
+    let mut score = 0.0;
+    for &b in bytes {
+        match b {
+            b'a'..=b'z' | b'A'..=b'Z' => score += 2.0,
+            b' ' => score += 3.0,
+            b'0'..=b'9' => score += 0.7,
+            b'.' | b',' | b'!' | b'?' | b'\'' | b'"' | b';' | b':' | b'-' | b'(' | b')' => {
+                score += 0.4
+            }
+            b'\n' | b'\r' | b'\t' => score += 0.2,
+            0x21..=0x7e => score += 0.1,
+            _ => score -= 5.0,
+        }
+    }
+
+    let lower = String::from_utf8_lossy(bytes).to_ascii_lowercase();
+    for common in [" the ", " and ", " to ", " of ", " in "] {
+        if lower.contains(common) {
+            score += 8.0;
+        }
+    }
+
+    let mut dictionary_hits = 0usize;
+    for word in lower
+        .split(|c: char| !c.is_ascii_alphabetic())
+        .filter(|w| !w.is_empty())
+    {
+        if matches!(
+            word,
+            "the"
+                | "and"
+                | "that"
+                | "have"
+                | "for"
+                | "not"
+                | "with"
+                | "you"
+                | "this"
+                | "but"
+                | "his"
+                | "from"
+                | "they"
+                | "say"
+                | "her"
+                | "she"
+                | "will"
+                | "one"
+                | "all"
+                | "would"
+                | "there"
+                | "their"
+                | "what"
+                | "about"
+                | "which"
+                | "when"
+                | "make"
+                | "can"
+                | "like"
+                | "time"
+                | "just"
+                | "know"
+                | "take"
+                | "people"
+                | "into"
+                | "year"
+                | "good"
+                | "some"
+                | "could"
+                | "them"
+                | "see"
+                | "other"
+                | "than"
+                | "then"
+                | "now"
+                | "look"
+                | "only"
+                | "come"
+                | "its"
+                | "over"
+                | "think"
+                | "also"
+                | "back"
+                | "after"
+                | "use"
+                | "two"
+                | "how"
+                | "our"
+                | "work"
+                | "first"
+                | "well"
+                | "way"
+                | "even"
+                | "new"
+                | "want"
+                | "because"
+                | "any"
+                | "these"
+                | "give"
+                | "day"
+                | "most"
+                | "us"
+                | "hello"
+                | "world"
+        ) {
+            dictionary_hits += 1;
+        }
+    }
+    score += dictionary_hits as f64 * 4.0;
+
+    score / bytes.len() as f64
+}
+
 fn split_words(input: &str) -> Vec<String> {
     let mut words = Vec::new();
     let mut current = String::new();
@@ -96,7 +247,7 @@ fn capitalize(s: &str) -> String {
 
 #[cfg(test)]
 mod test {
-    use super::{caesar, case_convert, rot13};
+    use super::{caesar, case_convert, rot13, rot13_bruteforce};
     use crate::commands::CaseStyle;
 
     #[test]
@@ -109,6 +260,14 @@ mod test {
         let encoded = caesar("abc", 3, false);
         assert_eq!(encoded, "def");
         assert_eq!(caesar(&encoded, 3, true), "abc");
+    }
+
+    #[test]
+    fn rot13_bruteforce_contains_shift_13() {
+        let results = rot13_bruteforce("uryyb jbeyq", 26, 0.0);
+        assert!(results
+            .iter()
+            .any(|c| c.shift == 13 && c.plaintext == "hello world"));
     }
 
     #[test]

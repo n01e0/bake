@@ -1,4 +1,4 @@
-# chef Usage
+# bake Usage
 
 CLI for encoding/decoding, crypto, text transforms, time/network utilities.
 
@@ -9,15 +9,15 @@ CLI for encoding/decoding, crypto, text transforms, time/network utilities.
 - Encode-side stdin input trims trailing `\n`/`\r\n` only.
 
 ```bash
-echo -n 'hello' | chef encode base64
-chef time from-unix --value 1704067200
-chef text url-parse --url 'https://example.com:443/a?x=1#f'
+echo -n 'hello' | bake encode base64
+bake time from-unix --value 1704067200
+bake text url-parse --url 'https://example.com:443/a?x=1#f'
 ```
 
 ## Top-level commands
 
 ```text
-Usage: chef <COMMAND>
+Usage: bake <COMMAND>
 
 Commands:
   completion  
@@ -37,7 +37,7 @@ Options:
 ## `completion`
 
 ```text
-Usage: chef completion <SHELL>
+Usage: bake completion <SHELL>
 
 Arguments:
   <SHELL>  [possible values: bash, elvish, fish, powershell, zsh]
@@ -50,7 +50,7 @@ Options:
 ## `encode`
 
 ```text
-Usage: chef encode <COMMAND>
+Usage: bake encode <COMMAND>
 
 Commands:
   url               
@@ -81,7 +81,7 @@ Options:
 ### `encode url`
 
 ```text
-Usage: chef encode url [OPTIONS]
+Usage: bake encode url [OPTIONS]
 
 Options:
   -a, --all      
@@ -92,7 +92,7 @@ Options:
 ### `encode hex`
 
 ```text
-Usage: chef encode hex [OPTIONS]
+Usage: bake encode hex [OPTIONS]
 
 Options:
   -d, --delimiter <DELIMITER>  [default: ]
@@ -105,7 +105,7 @@ Options:
 ### `encode base64`
 
 ```text
-Usage: chef encode base64 [OPTIONS]
+Usage: bake encode base64 [OPTIONS]
 
 Options:
       --url-safe    
@@ -117,7 +117,7 @@ Options:
 ### `encode base58`
 
 ```text
-Usage: chef encode base58
+Usage: bake encode base58
 
 Options:
   -h, --help     Print help
@@ -127,7 +127,7 @@ Options:
 ### `encode base85`
 
 ```text
-Usage: chef encode base85
+Usage: bake encode base85
 
 Options:
   -h, --help     Print help
@@ -137,7 +137,7 @@ Options:
 ### `encode base91`
 
 ```text
-Usage: chef encode base91
+Usage: bake encode base91
 
 Options:
   -h, --help     Print help
@@ -147,7 +147,7 @@ Options:
 ### `encode binary`
 
 ```text
-Usage: chef encode binary [OPTIONS]
+Usage: bake encode binary [OPTIONS]
 
 Options:
   -d, --delimiter <DELIMITER>  [default: ]
@@ -159,7 +159,7 @@ Options:
 ### `encode base32`
 
 ```text
-Usage: chef encode base32 [OPTIONS]
+Usage: bake encode base32 [OPTIONS]
 
 Options:
       --no-padding  
@@ -171,7 +171,7 @@ Options:
 ### `encode quoted-printable`
 
 ```text
-Usage: chef encode quoted-printable [OPTIONS]
+Usage: bake encode quoted-printable [OPTIONS]
 
 Options:
       --binary   
@@ -182,7 +182,7 @@ Options:
 ### `encode html-entity`
 
 ```text
-Usage: chef encode html-entity
+Usage: bake encode html-entity
 
 Options:
   -h, --help     Print help
@@ -192,7 +192,7 @@ Options:
 ### `encode punycode`
 
 ```text
-Usage: chef encode punycode
+Usage: bake encode punycode
 
 Options:
   -h, --help     Print help
@@ -202,7 +202,7 @@ Options:
 ### `encode unicode-escape`
 
 ```text
-Usage: chef encode unicode-escape
+Usage: bake encode unicode-escape
 
 Options:
   -h, --help     Print help
@@ -212,7 +212,7 @@ Options:
 ### `encode gzip-base64`
 
 ```text
-Usage: chef encode gzip-base64 [OPTIONS]
+Usage: bake encode gzip-base64 [OPTIONS]
 
 Options:
       --no-padding  
@@ -223,7 +223,7 @@ Options:
 ### `encode zlib-base64`
 
 ```text
-Usage: chef encode zlib-base64 [OPTIONS]
+Usage: bake encode zlib-base64 [OPTIONS]
 
 Options:
       --no-padding  
@@ -234,7 +234,7 @@ Options:
 ### `encode deflate-base64`
 
 ```text
-Usage: chef encode deflate-base64 [OPTIONS]
+Usage: bake encode deflate-base64 [OPTIONS]
 
 Options:
       --no-padding  
@@ -245,7 +245,7 @@ Options:
 ### `encode bzip2-base64`
 
 ```text
-Usage: chef encode bzip2-base64 [OPTIONS]
+Usage: bake encode bzip2-base64 [OPTIONS]
 
 Options:
       --no-padding  
@@ -256,7 +256,7 @@ Options:
 ### `encode xz-base64`
 
 ```text
-Usage: chef encode xz-base64 [OPTIONS]
+Usage: bake encode xz-base64 [OPTIONS]
 
 Options:
       --no-padding  
@@ -267,7 +267,7 @@ Options:
 ### `encode charset`
 
 ```text
-Usage: chef encode charset [OPTIONS] --to <TO>
+Usage: bake encode charset [OPTIONS] --to <TO>
 
 Options:
       --to <TO>          [possible values: utf8, utf16le, utf16be, shift-jis, euc-jp]
@@ -279,7 +279,7 @@ Options:
 ## `decode`
 
 ```text
-Usage: chef decode <COMMAND>
+Usage: bake decode <COMMAND>
 
 Commands:
   url               
@@ -310,7 +310,7 @@ Options:
 ### `decode url`
 
 ```text
-Usage: chef decode url
+Usage: bake decode url
 
 Options:
   -h, --help     Print help
@@ -320,7 +320,7 @@ Options:
 ### `decode hex`
 
 ```text
-Usage: chef decode hex
+Usage: bake decode hex
 
 Options:
   -h, --help     Print help
@@ -330,7 +330,7 @@ Options:
 ### `decode base64`
 
 ```text
-Usage: chef decode base64 [OPTIONS]
+Usage: bake decode base64 [OPTIONS]
 
 Options:
       --url-safe  
@@ -341,7 +341,7 @@ Options:
 ### `decode base58`
 
 ```text
-Usage: chef decode base58
+Usage: bake decode base58
 
 Options:
   -h, --help     Print help
@@ -351,7 +351,7 @@ Options:
 ### `decode base85`
 
 ```text
-Usage: chef decode base85
+Usage: bake decode base85
 
 Options:
   -h, --help     Print help
@@ -361,7 +361,7 @@ Options:
 ### `decode base91`
 
 ```text
-Usage: chef decode base91
+Usage: bake decode base91
 
 Options:
   -h, --help     Print help
@@ -371,7 +371,7 @@ Options:
 ### `decode binary`
 
 ```text
-Usage: chef decode binary
+Usage: bake decode binary
 
 Options:
   -h, --help     Print help
@@ -381,7 +381,7 @@ Options:
 ### `decode base32`
 
 ```text
-Usage: chef decode base32
+Usage: bake decode base32
 
 Options:
   -h, --help     Print help
@@ -391,7 +391,7 @@ Options:
 ### `decode quoted-printable`
 
 ```text
-Usage: chef decode quoted-printable [OPTIONS]
+Usage: bake decode quoted-printable [OPTIONS]
 
 Options:
       --strict   
@@ -402,7 +402,7 @@ Options:
 ### `decode html-entity`
 
 ```text
-Usage: chef decode html-entity
+Usage: bake decode html-entity
 
 Options:
   -h, --help     Print help
@@ -412,7 +412,7 @@ Options:
 ### `decode punycode`
 
 ```text
-Usage: chef decode punycode
+Usage: bake decode punycode
 
 Options:
   -h, --help     Print help
@@ -422,7 +422,7 @@ Options:
 ### `decode unicode-escape`
 
 ```text
-Usage: chef decode unicode-escape
+Usage: bake decode unicode-escape
 
 Options:
   -h, --help     Print help
@@ -432,7 +432,7 @@ Options:
 ### `decode gzip-base64`
 
 ```text
-Usage: chef decode gzip-base64
+Usage: bake decode gzip-base64
 
 Options:
   -h, --help     Print help
@@ -442,7 +442,7 @@ Options:
 ### `decode zlib-base64`
 
 ```text
-Usage: chef decode zlib-base64
+Usage: bake decode zlib-base64
 
 Options:
   -h, --help     Print help
@@ -452,7 +452,7 @@ Options:
 ### `decode deflate-base64`
 
 ```text
-Usage: chef decode deflate-base64
+Usage: bake decode deflate-base64
 
 Options:
   -h, --help     Print help
@@ -462,7 +462,7 @@ Options:
 ### `decode bzip2-base64`
 
 ```text
-Usage: chef decode bzip2-base64
+Usage: bake decode bzip2-base64
 
 Options:
   -h, --help     Print help
@@ -472,7 +472,7 @@ Options:
 ### `decode xz-base64`
 
 ```text
-Usage: chef decode xz-base64
+Usage: bake decode xz-base64
 
 Options:
   -h, --help     Print help
@@ -482,7 +482,7 @@ Options:
 ### `decode charset`
 
 ```text
-Usage: chef decode charset [OPTIONS] --from <FROM>
+Usage: bake decode charset [OPTIONS] --from <FROM>
 
 Options:
       --from <FROM>    [possible values: utf8, utf16le, utf16be, shift-jis, euc-jp]
@@ -494,7 +494,7 @@ Options:
 ## `crypto`
 
 ```text
-Usage: chef crypto <COMMAND>
+Usage: bake crypto <COMMAND>
 
 Commands:
   hash              
@@ -532,7 +532,7 @@ Options:
 ### `crypto hash`
 
 ```text
-Usage: chef crypto hash [OPTIONS]
+Usage: bake crypto hash [OPTIONS]
 
 Options:
   -a, --algorithm <ALGORITHM>  [default: sha256] [possible values: md5, sha1, sha256, sha512]
@@ -543,7 +543,7 @@ Options:
 ### `crypto hmac`
 
 ```text
-Usage: chef crypto hmac [OPTIONS] --key <KEY>
+Usage: bake crypto hmac [OPTIONS] --key <KEY>
 
 Options:
   -a, --algorithm <ALGORITHM>  [default: sha256] [possible values: sha256, sha512]
@@ -556,7 +556,7 @@ Options:
 ### `crypto crc`
 
 ```text
-Usage: chef crypto crc [OPTIONS]
+Usage: bake crypto crc [OPTIONS]
 
 Options:
   -a, --algorithm <ALGORITHM>  [default: crc32] [possible values: crc32, crc64]
@@ -567,7 +567,7 @@ Options:
 ### `crypto encrypt-aes-gcm`
 
 ```text
-Usage: chef crypto encrypt-aes-gcm [OPTIONS] --key <KEY_HEX> --nonce <NONCE_HEX>
+Usage: bake crypto encrypt-aes-gcm [OPTIONS] --key <KEY_HEX> --nonce <NONCE_HEX>
 
 Options:
       --key <KEY_HEX>      
@@ -581,7 +581,7 @@ Options:
 ### `crypto decrypt-aes-gcm`
 
 ```text
-Usage: chef crypto decrypt-aes-gcm [OPTIONS] --key <KEY_HEX> --nonce <NONCE_HEX>
+Usage: bake crypto decrypt-aes-gcm [OPTIONS] --key <KEY_HEX> --nonce <NONCE_HEX>
 
 Options:
       --key <KEY_HEX>      
@@ -594,7 +594,7 @@ Options:
 ### `crypto encrypt-aes-cbc`
 
 ```text
-Usage: chef crypto encrypt-aes-cbc [OPTIONS] --key <KEY_HEX> --iv <IV_HEX>
+Usage: bake crypto encrypt-aes-cbc [OPTIONS] --key <KEY_HEX> --iv <IV_HEX>
 
 Options:
       --key <KEY_HEX>  
@@ -607,7 +607,7 @@ Options:
 ### `crypto decrypt-aes-cbc`
 
 ```text
-Usage: chef crypto decrypt-aes-cbc --key <KEY_HEX> --iv <IV_HEX>
+Usage: bake crypto decrypt-aes-cbc --key <KEY_HEX> --iv <IV_HEX>
 
 Options:
       --key <KEY_HEX>  
@@ -619,7 +619,7 @@ Options:
 ### `crypto encrypt-aes-ecb`
 
 ```text
-Usage: chef crypto encrypt-aes-ecb [OPTIONS] --key <KEY_HEX>
+Usage: bake crypto encrypt-aes-ecb [OPTIONS] --key <KEY_HEX>
 
 Options:
       --key <KEY_HEX>  
@@ -631,7 +631,7 @@ Options:
 ### `crypto decrypt-aes-ecb`
 
 ```text
-Usage: chef crypto decrypt-aes-ecb --key <KEY_HEX>
+Usage: bake crypto decrypt-aes-ecb --key <KEY_HEX>
 
 Options:
       --key <KEY_HEX>  
@@ -642,7 +642,7 @@ Options:
 ### `crypto encrypt-aes-ctr`
 
 ```text
-Usage: chef crypto encrypt-aes-ctr [OPTIONS] --key <KEY_HEX> --iv <IV_HEX>
+Usage: bake crypto encrypt-aes-ctr [OPTIONS] --key <KEY_HEX> --iv <IV_HEX>
 
 Options:
       --key <KEY_HEX>  
@@ -655,7 +655,7 @@ Options:
 ### `crypto decrypt-aes-ctr`
 
 ```text
-Usage: chef crypto decrypt-aes-ctr --key <KEY_HEX> --iv <IV_HEX>
+Usage: bake crypto decrypt-aes-ctr --key <KEY_HEX> --iv <IV_HEX>
 
 Options:
       --key <KEY_HEX>  
@@ -667,7 +667,7 @@ Options:
 ### `crypto encrypt-chacha20`
 
 ```text
-Usage: chef crypto encrypt-chacha20 [OPTIONS] --key <KEY_HEX> --nonce <NONCE_HEX>
+Usage: bake crypto encrypt-chacha20 [OPTIONS] --key <KEY_HEX> --nonce <NONCE_HEX>
 
 Options:
       --key <KEY_HEX>      
@@ -680,7 +680,7 @@ Options:
 ### `crypto decrypt-chacha20`
 
 ```text
-Usage: chef crypto decrypt-chacha20 --key <KEY_HEX> --nonce <NONCE_HEX>
+Usage: bake crypto decrypt-chacha20 --key <KEY_HEX> --nonce <NONCE_HEX>
 
 Options:
       --key <KEY_HEX>      
@@ -692,7 +692,7 @@ Options:
 ### `crypto encrypt-rc4`
 
 ```text
-Usage: chef crypto encrypt-rc4 [OPTIONS] --key <KEY>
+Usage: bake crypto encrypt-rc4 [OPTIONS] --key <KEY>
 
 Options:
       --key <KEY>   
@@ -705,7 +705,7 @@ Options:
 ### `crypto decrypt-rc4`
 
 ```text
-Usage: chef crypto decrypt-rc4 [OPTIONS] --key <KEY>
+Usage: bake crypto decrypt-rc4 [OPTIONS] --key <KEY>
 
 Options:
       --key <KEY>  
@@ -717,7 +717,7 @@ Options:
 ### `crypto kdf-pbkdf2`
 
 ```text
-Usage: chef crypto kdf-pbkdf2 [OPTIONS] --password <PASSWORD> --salt <SALT>
+Usage: bake crypto kdf-pbkdf2 [OPTIONS] --password <PASSWORD> --salt <SALT>
 
 Options:
       --password <PASSWORD>      
@@ -732,7 +732,7 @@ Options:
 ### `crypto kdf-scrypt`
 
 ```text
-Usage: chef crypto kdf-scrypt [OPTIONS] --password <PASSWORD> --salt <SALT>
+Usage: bake crypto kdf-scrypt [OPTIONS] --password <PASSWORD> --salt <SALT>
 
 Options:
       --password <PASSWORD>  
@@ -749,7 +749,7 @@ Options:
 ### `crypto kdf-argon2id`
 
 ```text
-Usage: chef crypto kdf-argon2id [OPTIONS] --password <PASSWORD> --salt <SALT>
+Usage: bake crypto kdf-argon2id [OPTIONS] --password <PASSWORD> --salt <SALT>
 
 Options:
       --password <PASSWORD>        
@@ -766,7 +766,7 @@ Options:
 ### `crypto xor-single`
 
 ```text
-Usage: chef crypto xor-single [OPTIONS] --key <KEY>
+Usage: bake crypto xor-single [OPTIONS] --key <KEY>
 
 Options:
       --key <KEY>   
@@ -778,7 +778,7 @@ Options:
 ### `crypto xor-repeat`
 
 ```text
-Usage: chef crypto xor-repeat [OPTIONS] --key <KEY>
+Usage: bake crypto xor-repeat [OPTIONS] --key <KEY>
 
 Options:
       --key <KEY>   
@@ -791,7 +791,7 @@ Options:
 ### `crypto xor-bruteforce`
 
 ```text
-Usage: chef crypto xor-bruteforce [OPTIONS]
+Usage: bake crypto xor-bruteforce [OPTIONS]
 
 Options:
       --key-bytes <KEY_BYTES>  [default: 1]
@@ -807,7 +807,7 @@ Options:
 ### `crypto jwt-decode`
 
 ```text
-Usage: chef crypto jwt-decode
+Usage: bake crypto jwt-decode
 
 Options:
   -h, --help     Print help
@@ -817,7 +817,7 @@ Options:
 ### `crypto jwt-sign-hs256`
 
 ```text
-Usage: chef crypto jwt-sign-hs256 --key <KEY> --claims <CLAIMS>
+Usage: bake crypto jwt-sign-hs256 --key <KEY> --claims <CLAIMS>
 
 Options:
       --key <KEY>        
@@ -829,7 +829,7 @@ Options:
 ### `crypto jwt-verify-hs256`
 
 ```text
-Usage: chef crypto jwt-verify-hs256 --key <KEY>
+Usage: bake crypto jwt-verify-hs256 --key <KEY>
 
 Options:
       --key <KEY>  
@@ -840,7 +840,7 @@ Options:
 ### `crypto jwt-verify-rs256`
 
 ```text
-Usage: chef crypto jwt-verify-rs256 --public-key <PUBLIC_KEY>
+Usage: bake crypto jwt-verify-rs256 --public-key <PUBLIC_KEY>
 
 Options:
       --public-key <PUBLIC_KEY>  
@@ -851,7 +851,7 @@ Options:
 ## `text`
 
 ```text
-Usage: chef text <COMMAND>
+Usage: bake text <COMMAND>
 
 Commands:
   regex-replace      
@@ -885,7 +885,7 @@ Options:
 ### `text regex-replace`
 
 ```text
-Usage: chef text regex-replace [OPTIONS] <PATTERN> <REPLACEMENT>
+Usage: bake text regex-replace [OPTIONS] <PATTERN> <REPLACEMENT>
 
 Arguments:
   <PATTERN>      
@@ -902,7 +902,7 @@ Options:
 ### `text normalize-unicode`
 
 ```text
-Usage: chef text normalize-unicode [OPTIONS]
+Usage: bake text normalize-unicode [OPTIONS]
 
 Options:
   -f, --form <FORM>  [default: nfc] [possible values: nfc, nfd, nfkc, nfkd]
@@ -913,7 +913,7 @@ Options:
 ### `text rot13`
 
 ```text
-Usage: chef text rot13
+Usage: bake text rot13
 
 Options:
   -h, --help     Print help
@@ -923,7 +923,7 @@ Options:
 ### `text rot13-bruteforce`
 
 ```text
-Usage: chef text rot13-bruteforce [OPTIONS]
+Usage: bake text rot13-bruteforce [OPTIONS]
 
 Options:
       --top <TOP>              [default: 26]
@@ -935,7 +935,7 @@ Options:
 ### `text caesar`
 
 ```text
-Usage: chef text caesar [OPTIONS] --shift <SHIFT>
+Usage: bake text caesar [OPTIONS] --shift <SHIFT>
 
 Options:
       --shift <SHIFT>  
@@ -947,7 +947,7 @@ Options:
 ### `text case-convert`
 
 ```text
-Usage: chef text case-convert --style <STYLE>
+Usage: bake text case-convert --style <STYLE>
 
 Options:
       --style <STYLE>  [possible values: lower, upper, snake, kebab, camel, pascal]
@@ -958,7 +958,7 @@ Options:
 ### `text json-pretty`
 
 ```text
-Usage: chef text json-pretty
+Usage: bake text json-pretty
 
 Options:
   -h, --help     Print help
@@ -968,7 +968,7 @@ Options:
 ### `text json-minify`
 
 ```text
-Usage: chef text json-minify
+Usage: bake text json-minify
 
 Options:
   -h, --help     Print help
@@ -978,7 +978,7 @@ Options:
 ### `text json-path`
 
 ```text
-Usage: chef text json-path <QUERY>
+Usage: bake text json-path <QUERY>
 
 Arguments:
   <QUERY>  
@@ -991,7 +991,7 @@ Options:
 ### `text xml-pretty`
 
 ```text
-Usage: chef text xml-pretty
+Usage: bake text xml-pretty
 
 Options:
   -h, --help     Print help
@@ -1001,7 +1001,7 @@ Options:
 ### `text xml-minify`
 
 ```text
-Usage: chef text xml-minify
+Usage: bake text xml-minify
 
 Options:
   -h, --help     Print help
@@ -1011,7 +1011,7 @@ Options:
 ### `text xpath`
 
 ```text
-Usage: chef text xpath <QUERY>
+Usage: bake text xpath <QUERY>
 
 Arguments:
   <QUERY>  
@@ -1024,7 +1024,7 @@ Options:
 ### `text json-to-yaml`
 
 ```text
-Usage: chef text json-to-yaml
+Usage: bake text json-to-yaml
 
 Options:
   -h, --help     Print help
@@ -1034,7 +1034,7 @@ Options:
 ### `text yaml-to-json`
 
 ```text
-Usage: chef text yaml-to-json [OPTIONS]
+Usage: bake text yaml-to-json [OPTIONS]
 
 Options:
       --pretty   
@@ -1045,7 +1045,7 @@ Options:
 ### `text json-to-toml`
 
 ```text
-Usage: chef text json-to-toml
+Usage: bake text json-to-toml
 
 Options:
   -h, --help     Print help
@@ -1055,7 +1055,7 @@ Options:
 ### `text toml-to-json`
 
 ```text
-Usage: chef text toml-to-json [OPTIONS]
+Usage: bake text toml-to-json [OPTIONS]
 
 Options:
       --pretty   
@@ -1066,7 +1066,7 @@ Options:
 ### `text csv-to-json`
 
 ```text
-Usage: chef text csv-to-json [OPTIONS]
+Usage: bake text csv-to-json [OPTIONS]
 
 Options:
       --pretty   
@@ -1077,7 +1077,7 @@ Options:
 ### `text json-to-csv`
 
 ```text
-Usage: chef text json-to-csv
+Usage: bake text json-to-csv
 
 Options:
   -h, --help     Print help
@@ -1087,7 +1087,7 @@ Options:
 ### `text url-parse`
 
 ```text
-Usage: chef text url-parse --url <URL>
+Usage: bake text url-parse --url <URL>
 
 Options:
       --url <URL>  
@@ -1098,7 +1098,7 @@ Options:
 ### `text url-normalize`
 
 ```text
-Usage: chef text url-normalize --url <URL>
+Usage: bake text url-normalize --url <URL>
 
 Options:
       --url <URL>  
@@ -1109,7 +1109,7 @@ Options:
 ### `text defang`
 
 ```text
-Usage: chef text defang
+Usage: bake text defang
 
 Options:
   -h, --help     Print help
@@ -1119,7 +1119,7 @@ Options:
 ## `time`
 
 ```text
-Usage: chef time <COMMAND>
+Usage: bake time <COMMAND>
 
 Commands:
   from-unix  
@@ -1134,7 +1134,7 @@ Options:
 ### `time from-unix`
 
 ```text
-Usage: chef time from-unix [OPTIONS] --value <VALUE>
+Usage: bake time from-unix [OPTIONS] --value <VALUE>
 
 Options:
       --millis         
@@ -1146,7 +1146,7 @@ Options:
 ### `time to-unix`
 
 ```text
-Usage: chef time to-unix [OPTIONS] --value <VALUE>
+Usage: bake time to-unix [OPTIONS] --value <VALUE>
 
 Options:
       --millis         
@@ -1158,7 +1158,7 @@ Options:
 ## `network`
 
 ```text
-Usage: chef network <COMMAND>
+Usage: bake network <COMMAND>
 
 Commands:
   cidr-info          
@@ -1177,7 +1177,7 @@ Options:
 ### `network cidr-info`
 
 ```text
-Usage: chef network cidr-info [OPTIONS]
+Usage: bake network cidr-info [OPTIONS]
 
 Options:
       --cidr <CIDR>  
@@ -1188,7 +1188,7 @@ Options:
 ### `network ip-to-int`
 
 ```text
-Usage: chef network ip-to-int [OPTIONS]
+Usage: bake network ip-to-int [OPTIONS]
 
 Options:
       --ip <IP>  
@@ -1199,7 +1199,7 @@ Options:
 ### `network int-to-ip`
 
 ```text
-Usage: chef network int-to-ip [OPTIONS]
+Usage: bake network int-to-ip [OPTIONS]
 
 Options:
       --v6             
@@ -1211,7 +1211,7 @@ Options:
 ### `network dns-to-doh-packet`
 
 ```text
-Usage: chef network dns-to-doh-packet [OPTIONS]
+Usage: bake network dns-to-doh-packet [OPTIONS]
 
 Options:
       --name <NAME>          
@@ -1225,7 +1225,7 @@ Options:
 ### `network dns-packet-parse`
 
 ```text
-Usage: chef network dns-packet-parse [OPTIONS]
+Usage: bake network dns-packet-parse [OPTIONS]
 
 Options:
       --packet <PACKET>  
@@ -1237,7 +1237,7 @@ Options:
 ### `network doh-request`
 
 ```text
-Usage: chef network doh-request [OPTIONS] --endpoint <ENDPOINT>
+Usage: bake network doh-request [OPTIONS] --endpoint <ENDPOINT>
 
 Options:
       --name <NAME>          

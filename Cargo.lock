@@ -147,6 +147,57 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c08606f8c3cbf4ce6ec8e28fb0014a2c086708fe954eaa885384a6165172e7e8"
 
 [[package]]
+name = "bake"
+version = "0.1.0"
+dependencies = [
+ "aes",
+ "aes-gcm",
+ "anyhow",
+ "arc4",
+ "argon2",
+ "ascii85",
+ "base64",
+ "base91",
+ "bs58",
+ "bzip2",
+ "cbc",
+ "chacha20",
+ "chrono",
+ "clap",
+ "clap_complete",
+ "crc",
+ "csv",
+ "ctr",
+ "data-encoding",
+ "ecb",
+ "encoding_rs",
+ "flate2",
+ "hmac",
+ "idna",
+ "ipnet",
+ "jsonpath_lib",
+ "jsonwebtoken",
+ "md-5",
+ "nom",
+ "pbkdf2",
+ "percent-encoding-rfc3986",
+ "quoted_printable",
+ "regex",
+ "scrypt",
+ "serde_json",
+ "serde_yaml",
+ "sha1",
+ "sha2",
+ "sxd-document",
+ "sxd-xpath",
+ "toml",
+ "unicode-normalization",
+ "url",
+ "xmltree",
+ "xz2",
+]
+
+[[package]]
 name = "base16ct"
 version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -255,57 +306,6 @@ dependencies = [
  "cfg-if",
  "cipher",
  "cpufeatures",
-]
-
-[[package]]
-name = "chef"
-version = "0.1.0"
-dependencies = [
- "aes",
- "aes-gcm",
- "anyhow",
- "arc4",
- "argon2",
- "ascii85",
- "base64",
- "base91",
- "bs58",
- "bzip2",
- "cbc",
- "chacha20",
- "chrono",
- "clap",
- "clap_complete",
- "crc",
- "csv",
- "ctr",
- "data-encoding",
- "ecb",
- "encoding_rs",
- "flate2",
- "hmac",
- "idna",
- "ipnet",
- "jsonpath_lib",
- "jsonwebtoken",
- "md-5",
- "nom",
- "pbkdf2",
- "percent-encoding-rfc3986",
- "quoted_printable",
- "regex",
- "scrypt",
- "serde_json",
- "serde_yaml",
- "sha1",
- "sha2",
- "sxd-document",
- "sxd-xpath",
- "toml",
- "unicode-normalization",
- "url",
- "xmltree",
- "xz2",
 ]
 
 [[package]]

@@ -2,7 +2,7 @@ use anyhow::{anyhow, Result};
 
 #[derive(Debug, Clone)]
 pub struct Candidate {
-    pub key: u8,
+    pub key: Vec<u8>,
     pub score: f64,
     pub plaintext: String,
 }
@@ -39,27 +39,91 @@ pub fn format_output(bytes: &[u8], output_hex: bool) -> String {
 }
 
 pub fn brute_force_single_byte(input: &[u8], top: usize, min_score: f64) -> Vec<Candidate> {
+    brute_force(input, 1, top, min_score, None, None, &[]).unwrap_or_default()
+}
+
+pub fn brute_force(
+    input: &[u8],
+    key_bytes: usize,
+    top: usize,
+    min_score: f64,
+    prefix: Option<&str>,
+    suffix: Option<&str>,
+    words: &[String],
+) -> Result<Vec<Candidate>> {
     if input.is_empty() || top == 0 {
-        return Vec::new();
+        return Ok(Vec::new());
     }
 
-    let mut candidates: Vec<Candidate> = (0u16..=255)
-        .map(|k| {
-            let key = k as u8;
-            let decoded: Vec<u8> = input.iter().map(|b| b ^ key).collect();
-            let score = english_score(&decoded);
-            Candidate {
-                key,
-                score,
-                plaintext: String::from_utf8_lossy(&decoded).to_string(),
-            }
-        })
-        .filter(|c| c.score >= min_score)
-        .collect();
+    if key_bytes == 0 {
+        return Err(anyhow!("--key-bytes must be >= 1"));
+    }
+    if key_bytes > 3 {
+        return Err(anyhow!(
+            "--key-bytes > 3 is too expensive (search space grows as 256^N)"
+        ));
+    }
+
+    let key_space = 256usize.pow(key_bytes as u32);
+    let mut candidates = Vec::new();
+
+    for idx in 0..key_space {
+        let key = index_to_key(idx, key_bytes);
+        let decoded = xor_with_key(input, &key)?;
+        let plaintext = String::from_utf8_lossy(&decoded).to_string();
+
+        if !matches_filters(&plaintext, prefix, suffix, words) {
+            continue;
+        }
+
+        let score = english_score(&decoded);
+        if score < min_score {
+            continue;
+        }
+
+        candidates.push(Candidate {
+            key,
+            score,
+            plaintext,
+        });
+    }
 
     candidates.sort_by(|a, b| b.score.total_cmp(&a.score).then_with(|| a.key.cmp(&b.key)));
     candidates.truncate(top);
-    candidates
+    Ok(candidates)
+}
+
+fn matches_filters(
+    plaintext: &str,
+    prefix: Option<&str>,
+    suffix: Option<&str>,
+    words: &[String],
+) -> bool {
+    if let Some(p) = prefix {
+        if !plaintext.starts_with(p) {
+            return false;
+        }
+    }
+    if let Some(s) = suffix {
+        if !plaintext.ends_with(s) {
+            return false;
+        }
+    }
+    for w in words {
+        if !plaintext.contains(w) {
+            return false;
+        }
+    }
+    true
+}
+
+fn index_to_key(mut idx: usize, key_bytes: usize) -> Vec<u8> {
+    let mut key = vec![0u8; key_bytes];
+    for i in (0..key_bytes).rev() {
+        key[i] = (idx & 0xff) as u8;
+        idx >>= 8;
+    }
+    key
 }
 
 fn parse_hex_bytes(input: &str) -> Result<Vec<u8>> {
@@ -119,7 +183,9 @@ fn english_score(bytes: &[u8]) -> f64 {
 
 #[cfg(test)]
 mod test {
-    use super::{brute_force_single_byte, format_output, parse_repeat_key, xor_with_key};
+    use super::{
+        brute_force, brute_force_single_byte, format_output, parse_repeat_key, xor_with_key,
+    };
 
     #[test]
     fn xor_single_byte() {
@@ -148,8 +214,46 @@ mod test {
     #[test]
     fn brute_force_finds_key() {
         let cipher = xor_with_key(b"hello world", &[0x42]).unwrap();
-        let results = brute_force_single_byte(&cipher, 3, 0.0);
-        assert_eq!(results[0].key, 0x42);
-        assert!(results[0].plaintext.contains("hello"));
+        let results = brute_force_single_byte(&cipher, 5, 0.0);
+        assert!(results.iter().any(|c| c.key == vec![0x42]));
+        assert!(results.iter().any(|c| c.plaintext.contains("hello")));
+    }
+
+    #[test]
+    fn brute_force_two_byte_key_with_prefix_filter() {
+        let cipher = xor_with_key(b"hello world", &[0x12, 0x34]).unwrap();
+        let results = brute_force(&cipher, 2, 10, 0.0, Some("hello"), None, &[]).unwrap();
+        assert!(results
+            .iter()
+            .any(|c| c.key == vec![0x12, 0x34] && c.plaintext == "hello world"));
+    }
+
+    #[test]
+    fn brute_force_word_and_suffix_filters() {
+        let cipher = xor_with_key(b"flag{test}", &[0x42]).unwrap();
+        let results = brute_force(
+            &cipher,
+            1,
+            20,
+            0.0,
+            Some("flag{"),
+            Some("}"),
+            &["test".to_string()],
+        )
+        .unwrap();
+        assert!(results.iter().any(|c| c.key == vec![0x42]));
+    }
+
+    #[test]
+    fn invalid_key_bytes() {
+        let err = brute_force(b"abc", 0, 5, 0.0, None, None, &[])
+            .unwrap_err()
+            .to_string();
+        assert!(err.contains("key-bytes"));
+
+        let err = brute_force(b"abc", 4, 5, 0.0, None, None, &[])
+            .unwrap_err()
+            .to_string();
+        assert!(err.contains("too expensive"));
     }
 }

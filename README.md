@@ -33,6 +33,12 @@ echo -n 'hello' | chef crypto hash --algorithm sha256
 echo -n 'hello' | chef crypto encrypt-aes-gcm \
   --key 000102030405060708090a0b0c0d0e0f000102030405060708090a0b0c0d0e0f \
   --nonce 1a1b1c1d1e1f202122232425
+# XOR brute force (default key-bytes=1)
+python3 - <<'PY' | chef crypto xor-bruteforce --word hello
+import sys
+pt=b'hello world'; key=0x42
+sys.stdout.buffer.write(bytes([b ^ key for b in pt]))
+PY
 
 # Text
 printf '{"a":1}' | chef text json-pretty

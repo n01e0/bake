@@ -375,11 +375,20 @@ pub enum CryptoCommands {
         #[clap(long = "output-hex")]
         output_hex: bool,
     },
-    XorBruteforceSingleByte {
+    #[command(name = "xor-bruteforce", alias = "xor-bruteforce-single-byte")]
+    XorBruteforce {
+        #[clap(long = "key-bytes", default_value_t = 1)]
+        key_bytes: usize,
         #[clap(long = "top", default_value_t = 5)]
         top: usize,
         #[clap(long = "min-score", default_value_t = 0.0)]
         min_score: f64,
+        #[clap(long = "prefix")]
+        prefix: Option<String>,
+        #[clap(long = "suffix")]
+        suffix: Option<String>,
+        #[clap(long = "word")]
+        word: Vec<String>,
     },
     JwtDecode,
     JwtSignHs256 {

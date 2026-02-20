@@ -537,15 +537,32 @@ fn main() -> Result<()> {
                 let out = transform::xor::xor_with_key(stdin.trimmed_bytes()?, &key_bytes)?;
                 println!("{}", transform::xor::format_output(&out, *output_hex));
             }
-            CryptoCommands::XorBruteforceSingleByte { top, min_score } => {
-                for c in transform::xor::brute_force_single_byte(
+            CryptoCommands::XorBruteforce {
+                key_bytes,
+                top,
+                min_score,
+                prefix,
+                suffix,
+                word,
+            } => {
+                let results = transform::xor::brute_force(
                     stdin.trimmed_bytes()?,
+                    *key_bytes,
                     *top,
                     *min_score,
-                ) {
+                    prefix.as_deref(),
+                    suffix.as_deref(),
+                    word,
+                )?;
+
+                for c in results {
+                    let key_hex: String = c.key.iter().map(|b| format!("{b:02x}")).collect();
                     println!(
-                        "key=0x{:02x} score={:.3} text={}",
-                        c.key, c.score, c.plaintext
+                        "key=0x{} key_bytes={} score={:.3} text={}",
+                        key_hex,
+                        c.key.len(),
+                        c.score,
+                        c.plaintext
                     );
                 }
             }

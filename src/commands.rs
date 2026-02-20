@@ -415,6 +415,12 @@ pub enum TextCommands {
         form: UnicodeForm,
     },
     Rot13,
+    Rot13Bruteforce {
+        #[clap(long = "top", default_value_t = 26)]
+        top: usize,
+        #[clap(long = "min-score", default_value_t = 0.0)]
+        min_score: f64,
+    },
     Caesar {
         #[clap(long = "shift")]
         shift: i8,

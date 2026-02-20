@@ -853,6 +853,7 @@ Commands:
   regex-replace      
   normalize-unicode  
   rot13              
+  rot13-bruteforce   
   caesar             
   case-convert       
   json-pretty        
@@ -913,6 +914,18 @@ Usage: chef text rot13
 Options:
   -h, --help     Print help
   -V, --version  Print version
+```
+
+### `text rot13-bruteforce`
+
+```text
+Usage: chef text rot13-bruteforce [OPTIONS]
+
+Options:
+      --top <TOP>              [default: 26]
+      --min-score <MIN_SCORE>  [default: 0]
+  -h, --help                   Print help
+  -V, --version                Print version
 ```
 
 ### `text caesar`

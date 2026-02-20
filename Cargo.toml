@@ -15,7 +15,7 @@ base91 = "0.1.0"
 bs58 = "0.5.1"
 bzip2 = "0.6.1"
 cbc = { version = "0.1.2", features = ["alloc"] }
-chacha20 = "0.9.1"
+chacha20 = "0.10.0"
 chrono = "0.4.43"
 clap = { version = "4.5.57", features = ["derive"] }
 clap_complete = "4.5.57"

@@ -795,8 +795,8 @@ Usage: bake crypto xor-bruteforce [OPTIONS]
 
 Options:
       --key-bytes <KEY_BYTES>  [default: 1]
-      --top <TOP>              [default: 5]
-      --min-score <MIN_SCORE>  [default: 0]
+      --top <TOP>              Max results (0 = no limit) [default: 0]
+      --min-score <MIN_SCORE>  [default: -1000000000]
       --prefix <PREFIX>        
       --suffix <SUFFIX>        
       --word <WORD>            

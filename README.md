@@ -33,12 +33,14 @@ echo -n 'hello' | bake crypto hash --algorithm sha256
 echo -n 'hello' | bake crypto encrypt-aes-gcm \
   --key 000102030405060708090a0b0c0d0e0f000102030405060708090a0b0c0d0e0f \
   --nonce 1a1b1c1d1e1f202122232425
-# XOR brute force (default key-bytes=1)
+# XOR brute force (default: show all matches)
 python3 - <<'PY' | bake crypto xor-bruteforce --word hello
 import sys
 pt=b'hello world'; key=0x42
 sys.stdout.buffer.write(bytes([b ^ key for b in pt]))
 PY
+# limit output if needed
+# ... | bake crypto xor-bruteforce --top 20
 
 # Text
 printf '{"a":1}' | bake text json-pretty

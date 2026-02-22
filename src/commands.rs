@@ -379,9 +379,9 @@ pub enum CryptoCommands {
     XorBruteforce {
         #[clap(long = "key-bytes", default_value_t = 1)]
         key_bytes: usize,
-        #[clap(long = "top", default_value_t = 5)]
+        #[clap(long = "top", default_value_t = 0, help = "Max results (0 = no limit)")]
         top: usize,
-        #[clap(long = "min-score", default_value_t = 0.0)]
+        #[clap(long = "min-score", default_value_t = -1_000_000_000.0)]
         min_score: f64,
         #[clap(long = "prefix")]
         prefix: Option<String>,

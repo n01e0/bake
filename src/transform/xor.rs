@@ -51,7 +51,7 @@ pub fn brute_force(
     suffix: Option<&str>,
     words: &[String],
 ) -> Result<Vec<Candidate>> {
-    if input.is_empty() || top == 0 {
+    if input.is_empty() {
         return Ok(Vec::new());
     }
 
@@ -61,6 +61,13 @@ pub fn brute_force(
     if key_bytes > 3 {
         return Err(anyhow!(
             "--key-bytes > 3 is too expensive (search space grows as 256^N)"
+        ));
+    }
+
+    let no_filters = prefix.is_none() && suffix.is_none() && words.is_empty();
+    if top == 0 && key_bytes == 3 && no_filters {
+        return Err(anyhow!(
+            "Refusing unbounded 3-byte search without filters. Use --top, --prefix/--suffix/--word, or lower --key-bytes"
         ));
     }
 
@@ -81,16 +88,40 @@ pub fn brute_force(
             continue;
         }
 
-        candidates.push(Candidate {
+        let candidate = Candidate {
             key,
             score,
             plaintext,
-        });
+        };
+
+        if top == 0 {
+            candidates.push(candidate);
+            continue;
+        }
+
+        if candidates.len() < top {
+            candidates.push(candidate);
+            continue;
+        }
+
+        let mut worst_index = 0usize;
+        for i in 1..candidates.len() {
+            if better(&candidates[worst_index], &candidates[i]) {
+                worst_index = i;
+            }
+        }
+
+        if better(&candidate, &candidates[worst_index]) {
+            candidates[worst_index] = candidate;
+        }
     }
 
     candidates.sort_by(|a, b| b.score.total_cmp(&a.score).then_with(|| a.key.cmp(&b.key)));
-    candidates.truncate(top);
     Ok(candidates)
+}
+
+fn better(a: &Candidate, b: &Candidate) -> bool {
+    a.score > b.score || (a.score == b.score && a.key < b.key)
 }
 
 fn matches_filters(

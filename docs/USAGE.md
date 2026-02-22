@@ -800,6 +800,7 @@ Options:
       --prefix <PREFIX>        
       --suffix <SUFFIX>        
       --word <WORD>            
+  -r, --raw                    Print only plaintext, one line per candidate
   -h, --help                   Print help
   -V, --version                Print version
 ```

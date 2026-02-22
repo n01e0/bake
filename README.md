@@ -39,6 +39,8 @@ import sys
 pt=b'hello world'; key=0x42
 sys.stdout.buffer.write(bytes([b ^ key for b in pt]))
 PY
+# plaintext only (no key/score metadata)
+# ... | bake crypto xor-bruteforce --raw
 # limit output if needed
 # ... | bake crypto xor-bruteforce --top 20
 

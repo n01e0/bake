@@ -544,6 +544,7 @@ fn main() -> Result<()> {
                 prefix,
                 suffix,
                 word,
+                raw,
             } => {
                 let results = transform::xor::brute_force(
                     stdin.trimmed_bytes()?,
@@ -556,6 +557,11 @@ fn main() -> Result<()> {
                 )?;
 
                 for c in results {
+                    if *raw {
+                        println!("{}", c.plaintext);
+                        continue;
+                    }
+
                     let key_hex: String = c.key.iter().map(|b| format!("{b:02x}")).collect();
                     println!(
                         "key=0x{} key_bytes={} score={:.3} text={}",

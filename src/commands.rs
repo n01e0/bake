@@ -389,6 +389,12 @@ pub enum CryptoCommands {
         suffix: Option<String>,
         #[clap(long = "word")]
         word: Vec<String>,
+        #[clap(
+            long = "raw",
+            short = 'r',
+            help = "Print only plaintext, one line per candidate"
+        )]
+        raw: bool,
     },
     JwtDecode,
     JwtSignHs256 {

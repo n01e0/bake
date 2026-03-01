@@ -626,12 +626,23 @@ fn main() -> Result<()> {
                     transform::text_extra::rot13(stdin.require_trimmed("input")?)
                 );
             }
-            TextCommands::Rot13Bruteforce { top, min_score } => {
+            TextCommands::Rot13Bruteforce {
+                top,
+                min_score,
+                prefix,
+                raw,
+            } => {
                 for c in transform::text_extra::rot13_bruteforce(
                     stdin.require_trimmed("input")?,
                     *top,
                     *min_score,
+                    prefix.as_deref(),
                 ) {
+                    if *raw {
+                        println!("{}", c.plaintext);
+                        continue;
+                    }
+
                     println!(
                         "shift={} score={:.3} text={}",
                         c.shift, c.score, c.plaintext

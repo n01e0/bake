@@ -48,6 +48,8 @@ PY
 printf '{"a":1}' | bake text json-pretty
 bake text url-parse --url 'https://example.com:443/path?a=1#frag'
 printf 'uryyb jbeyq' | bake text rot13-bruteforce --top 5
+# plaintext only + prefix filter
+printf 'uryyb jbeyq' | bake text rot13-bruteforce --prefix hello --raw
 
 # Time / Network (no stdin required)
 bake time from-unix --value 1704067200

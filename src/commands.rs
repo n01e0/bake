@@ -435,6 +435,14 @@ pub enum TextCommands {
         top: usize,
         #[clap(long = "min-score", default_value_t = 0.0)]
         min_score: f64,
+        #[clap(long = "prefix")]
+        prefix: Option<String>,
+        #[clap(
+            long = "raw",
+            short = 'r',
+            help = "Print only plaintext, one line per candidate"
+        )]
+        raw: bool,
     },
     Caesar {
         #[clap(long = "shift")]

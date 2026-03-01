@@ -16,7 +16,12 @@ pub fn caesar(input: &str, shift: i8, decode: bool) -> String {
     caesar_with_shift(input, effective)
 }
 
-pub fn rot13_bruteforce(input: &str, top: usize, min_score: f64) -> Vec<CaesarCandidate> {
+pub fn rot13_bruteforce(
+    input: &str,
+    top: usize,
+    min_score: f64,
+    prefix: Option<&str>,
+) -> Vec<CaesarCandidate> {
     if input.is_empty() || top == 0 {
         return Vec::new();
     }
@@ -32,6 +37,7 @@ pub fn rot13_bruteforce(input: &str, top: usize, min_score: f64) -> Vec<CaesarCa
             }
         })
         .filter(|c| c.score >= min_score)
+        .filter(|c| prefix.map(|p| c.plaintext.starts_with(p)).unwrap_or(true))
         .collect();
 
     candidates.sort_by(|a, b| {
@@ -264,7 +270,17 @@ mod test {
 
     #[test]
     fn rot13_bruteforce_contains_shift_13() {
-        let results = rot13_bruteforce("uryyb jbeyq", 26, 0.0);
+        let results = rot13_bruteforce("uryyb jbeyq", 26, 0.0, None);
+        assert!(results
+            .iter()
+            .any(|c| c.shift == 13 && c.plaintext == "hello world"));
+    }
+
+    #[test]
+    fn rot13_bruteforce_prefix_filter() {
+        let results = rot13_bruteforce("uryyb jbeyq", 26, 0.0, Some("hello"));
+        assert!(!results.is_empty());
+        assert!(results.iter().all(|c| c.plaintext.starts_with("hello")));
         assert!(results
             .iter()
             .any(|c| c.shift == 13 && c.plaintext == "hello world"));

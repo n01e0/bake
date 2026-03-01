@@ -929,6 +929,8 @@ Usage: bake text rot13-bruteforce [OPTIONS]
 Options:
       --top <TOP>              [default: 26]
       --min-score <MIN_SCORE>  [default: 0]
+      --prefix <PREFIX>        
+  -r, --raw                    Print only plaintext, one line per candidate
   -h, --help                   Print help
   -V, --version                Print version
 ```
